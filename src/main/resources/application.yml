@@ -1,0 +1,51 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: take_out
+  datasource:
+#    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/takeout?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: 123456
+#  redis:
+#    port: 6379
+#    host: localhost
+#    password: 123456
+#  cache:
+#    redis:
+#      time-to-live: 1800000
+#  jackson:
+#    date-format: yyyy-MM-dd HH:mm:ss
+#    time-zone: Asia/Shanghai
+  configuration:
+    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID
+  mail:
+    host: smtp.qq.com
+    port: 465  # 使用465端口（SSL）或587（TLS）
+    username: 3120363579@qq.com #发送验证码的邮箱
+    password: kzmjtybfxnuodggg #QQ邮箱授权码
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: false  # 如果使用SSL，则不启用STARTTLS
+          ssl:
+            enable: true
+images:
+  path: D:\桌面\
+#images:
+#  path: /root/images/
+#images:
+#  path: E:\BaiduNetdiskDownload\瑞吉外卖\1 瑞吉外卖项目\资料\图片资源\
+#logging:
+#  level:
+#    com.xialiu.elemei.mapper: DEBUG
+
