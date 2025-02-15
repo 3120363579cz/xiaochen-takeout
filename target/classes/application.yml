@@ -14,9 +14,9 @@ spring:
       host: 192.168.249.130
       port: 6379
       database: 0
-  #  cache:
-#    redis:
-#      time-to-live: 1800000
+  cache:
+    redis:
+      time-to-live: 600000 #设置缓存数据过期时间(ms)
 #  jackson:
 #    date-format: yyyy-MM-dd HH:mm:ss
 #    time-zone: Asia/Shanghai

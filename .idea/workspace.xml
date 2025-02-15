@@ -7,10 +7,11 @@
     <list default="true" id="5c4134cc-9542-45c2-96df-469785821e7d" name="更改" comment="提交未完善的项目">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/DishController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/DishController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/SetmealController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/SetmealController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/DishController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/DishController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/SetmealController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/SetmealController.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +62,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.TakeoutApplication.executor": "Run",
-    "git-widget-placeholder": "v1.0",
+    "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/IntelliJ IDEA 2023.3.4/workspace/idealproject/takeout/src/main/java/com/cz/takeout/config",
     "node.js.detected.package.eslint": "true",
