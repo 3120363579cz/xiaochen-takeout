@@ -1,52 +1,97 @@
 server:
   port: 8080
+
 spring:
   application:
     name: take_out
-  datasource:
-#    druid:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/takeout?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: root
-      password: 123456
+
+  # ========== 数据源配置 ==========
+  shardingsphere:
+    # 启用ShardingSphere并禁用自动创建本地数据库
+    enabled: true
+    mode:
+      type: Standalone
+      repository:
+        type: JDBC
+    datasource:
+      names: master,slave
+      master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.249.130:3307/takeout?useSSL=false&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+        # 禁用HikariCP自动配置
+        hikari:
+          enabled: false
+      slave:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.249.130:3308/takeout?useSSL=false&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+        hikari:
+          enabled: false
+    rules:
+      readwrite-splitting:
+        data-sources:
+          dataSource:
+            type: Static
+            props:
+              write-data-source-name: master
+              read-data-source-names: slave
+            load-balancer-name: round_robin
+        load-balancers:
+          round_robin:
+            type: ROUND_ROBIN
+    props:
+      sql-show: true
+
+  # ========== Redis配置 ==========
   data:
     redis:
       host: 192.168.249.130
       port: 6379
       database: 0
+
+  # ========== 缓存配置 ==========
   cache:
     redis:
-      time-to-live: 600000 #设置缓存数据过期时间(ms)
-#  jackson:
-#    date-format: yyyy-MM-dd HH:mm:ss
-#    time-zone: Asia/Shanghai
-  configuration:
-    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
-    map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  global-config:
-    db-config:
-      id-type: ASSIGN_ID
+      time-to-live: 600000ms
+
+  # ========== MyBatis配置 ==========
+  mybatis:
+    configuration:
+      map-underscore-to-camel-case: true
+      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 添加Mapper扫描路径
+    mapper-locations: classpath:mapper/*.xml
+    type-aliases-package: com.cz.takeout.entity
+    global-config:
+      db-config:
+        id-type: assign_id
+
+  # ========== 邮件配置 ==========
   mail:
     host: smtp.qq.com
-    port: 465  # 使用465端口（SSL）或587（TLS）
-    username: 3120363579@qq.com #发送验证码的邮箱
-    password: kzmjtybfxnuodggg #QQ邮箱授权码
+    port: 465
+    username: 3120363579@qq.com    # 替换为真实邮箱
+    password: kzmjtybfxnuodggg     # 替换为真实授权码
+    protocol: smtps
     properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: false  # 如果使用SSL，则不启用STARTTLS
-          ssl:
-            enable: true
-images:
-  path: D:\桌面\
-#images:
-#  path: /root/images/
-#images:
-#  path: E:\BaiduNetdiskDownload\瑞吉外卖\1 瑞吉外卖项目\资料\图片资源\
-#logging:
-#  level:
-#    com.xialiu.elemei.mapper: DEBUG
+      mail.smtp.ssl.enable: true
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 3000
 
+  # ========== 数据库初始化 ==========
+  sql:
+    init:
+      mode: always  # 开发环境自动初始化表结构
+      platform: mysql
+      schema-locations: classpath:schema.sql
+
+# ========== 自定义配置 ==========
+images:
+  path: 'D:\\桌面\\'  # Windows路径使用双反斜杠转义
