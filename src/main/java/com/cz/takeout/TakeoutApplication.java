@@ -1,16 +1,18 @@
 package com.cz.takeout;
 
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Slf4j
 @ServletComponentScan
 @EnableTransactionManagement
-@EnableCaching//开启Spring Cache注解方式是缓存功能
+@EnableCaching
 @SpringBootApplication
 public class TakeoutApplication {
 
