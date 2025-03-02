@@ -1,6 +1,7 @@
 package com.cz.takeout.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cz.takeout.common.R;
@@ -19,6 +20,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,9 +41,6 @@ public class DishController {
     @Autowired
     private CategoryService categoryService;
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-
     //新增菜品
     @PostMapping
     @CacheEvict(value = "dishCache", allEntries = true)
@@ -50,6 +49,13 @@ public class DishController {
 
         dishService.saveWithFlavor(dishDto);
         return R.success("新增菜品成功");
+    }
+
+    //批量删除
+    @DeleteMapping
+    public R<String> deleteByIds(Long[] ids) {
+        dishService.removeByIds(Arrays.asList(ids));
+        return R.success("删除成功");
     }
 
     //根据id查询菜品信息和对应的口味信息
@@ -69,6 +75,30 @@ public class DishController {
 
         dishService.updateWithFlavor(dishDto);
         return R.success("修改菜品成功");
+    }
+
+    //启售，批量启售
+    @PostMapping("/status/1")
+    public R<String> openStatus(Long[] ids) {
+        // 构建UpdateWrapper批量更新
+        LambdaUpdateWrapper<Dish> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.in(Dish::getId, ids)
+                .set(Dish::getStatus, 1);
+        dishService.update(updateWrapper);
+
+        return R.success("修改成功");
+    }
+
+    //停售，批量停售
+    @PostMapping("/status/0")
+    public R<String> closeStatus(Long[] ids){
+        // 构建UpdateWrapper批量更新
+        LambdaUpdateWrapper<Dish> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.in(Dish::getId, ids)
+                .set(Dish::getStatus, 0);
+        dishService.update(updateWrapper);
+
+        return R.success("修改成功");
     }
 
     //菜品信息分页查询
