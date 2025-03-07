@@ -6,10 +6,24 @@
   <component name="ChangeListManager">
     <list default="true" id="5c4134cc-9542-45c2-96df-469785821e7d" name="更改" comment="提交未完善的项目">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/DishController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/DishController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/config/WebMvcConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/config/WebMvcConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/DishController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/DishController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/filter/LoginCheckFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/filter/LoginCheckFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/SetmealController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/SetmealController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cz/takeout/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cz/takeout/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cz/takeout/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cz/takeout/service/SetmealService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cz/takeout/service/SetmealService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cz/takeout/service/impl/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cz/takeout/service/impl/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cz/takeout/service/impl/SetmealServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cz/takeout/service/impl/SetmealServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/backend/page/combo/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/backend/page/combo/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/backend/page/order/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/backend/page/order/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/backend/page/combo/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/backend/page/combo/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/backend/page/order/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/backend/page/order/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/OrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/OrderController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/SetmealController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/SetmealController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/service/OrderService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/service/OrderService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/service/SetmealService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/service/SetmealService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/service/impl/OrderServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/service/impl/OrderServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cz/takeout/service/impl/SetmealServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/cz/takeout/service/impl/SetmealServiceImpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,6 +155,7 @@
       <workItem from="1740052762159" duration="5300000" />
       <workItem from="1740377189821" duration="7416000" />
       <workItem from="1740387826390" duration="2565000" />
+      <workItem from="1740907933686" duration="12590000" />
     </task>
     <task id="LOCAL-00001" summary="提交未完善的项目">
       <option name="closed" value="true" />
@@ -182,7 +197,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740061060206</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="提交未完善的项目">
+      <option name="closed" value="true" />
+      <created>1740907960865</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1740907960865</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

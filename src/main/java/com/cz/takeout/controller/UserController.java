@@ -6,6 +6,7 @@ import com.cz.takeout.common.R;
 import com.cz.takeout.entity.User;
 import com.cz.takeout.service.UserService;
 import com.cz.takeout.utils.ValidateCodeUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,14 @@ public class UserController {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    //用户退出
+    @PostMapping("/loginout")
+    public R<String> loginOut(HttpServletRequest request){
+        request.getSession().removeAttribute("user");
+        return R.success("退出成功");
+    }
+
 
     //发送手机短信验证码
     @PostMapping("/sendMsg")

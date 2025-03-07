@@ -2,6 +2,8 @@ package com.cz.takeout.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cz.takeout.common.BaseContext;
 import com.cz.takeout.common.CustomException;
@@ -34,6 +36,22 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
 
     @Autowired
     private OrderDetailService orderDetailService;
+
+    //查看订单明细
+    @Override
+    public Page<Orders> pageOrders(int page, int pageSize, String number, String beginTime, String endTime) {
+        // 构建分页对象
+        Page<Orders> pageInfo = new Page<>(page, pageSize);
+
+        // 创建查询条件
+        LambdaQueryWrapper<Orders> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(number != null, Orders::getNumber, number)
+                .gt(StringUtils.isNotEmpty(beginTime), Orders::getOrderTime, beginTime)
+                .lt(StringUtils.isNotEmpty(endTime), Orders::getOrderTime, endTime);
+
+        // 执行分页查询
+        return baseMapper.selectPage(pageInfo, queryWrapper);
+    }
 
     //用户下单
     @Transactional
