@@ -5,10 +5,15 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cz.takeout.common.R;
+import com.cz.takeout.dto.DishDto;
 import com.cz.takeout.dto.SetmealDto;
 import com.cz.takeout.entity.Category;
+import com.cz.takeout.entity.Dish;
 import com.cz.takeout.entity.Setmeal;
+import com.cz.takeout.entity.SetmealDish;
 import com.cz.takeout.service.CategoryService;
+import com.cz.takeout.service.DishService;
+import com.cz.takeout.service.SetmealDishService;
 import com.cz.takeout.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -33,6 +38,12 @@ public class SetmealController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private SetmealDishService setmealDishService;
+
+    @Autowired
+    private DishService dishService;
 
     //新增套餐
     @PostMapping
@@ -88,6 +99,31 @@ public class SetmealController {
         setmealService.updateWithDish(setmealDto);
         return R.success("修改成功");
 
+    }
+
+    //点击套餐图片查看套餐具体内容
+    @GetMapping("/dish/{id}")
+    public R<List<DishDto>> getSetmealDishes(@PathVariable Long id) {
+        // 查询套餐关联菜品列表
+        List<SetmealDish> setmealDishes = setmealDishService.lambdaQuery()
+                .eq(SetmealDish::getSetmealId, id)
+                .list();
+
+        // 转换为DTO列表
+        List<DishDto> dtos = setmealDishes.stream()
+                .map(sd -> {
+                    DishDto dto = new DishDto();
+
+                    // 合并属性拷贝
+                    Dish dish = dishService.getById(sd.getDishId());
+                    BeanUtils.copyProperties(sd, dto);  // 套餐菜品信息
+                    BeanUtils.copyProperties(dish, dto); // 基础菜品信息
+
+                    return dto;
+                })
+                .toList();
+
+        return R.success(dtos);
     }
 
     //根据条件查询套餐数据
