@@ -1,13 +1,14 @@
 package com.cz.takeout.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cz.takeout.common.R;
 import com.cz.takeout.entity.Orders;
 import com.cz.takeout.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 //订单
 @Slf4j
@@ -21,23 +22,15 @@ public class OrderController {
     //用户下单
     @PostMapping("/submit")
     public R<String> submit(@RequestBody Orders orders) {
+        log.info("订单数据：{}", orders);
         orderService.submit(orders);
         return R.success("下单成功");
     }
 
-    //修改订单状态
-    @PutMapping
-    public R<String> orderStatusChange(@RequestBody Map<String, String> map) {
-        Long  orderId = Long.parseLong(map.get("id"));
-        Integer status = Integer.parseInt(map.get("status"));
-        if (orderId == null || status == null) {
-            return R.error("非法信息传入");
-        }
-
-        Orders orders = orderService.getById(orderId);
-        orders.setStatus(status);
-        orderService.updateById(orders);
-
-        return R.success("修改成功");
+    //后台查询订单明细
+    @GetMapping("/page")
+    public R<Page<Orders>> page(int page, int pageSize, String number, String beginTime, String endTime) {
+        Page<Orders> pageInfo = orderService.pageOrders(page, pageSize, number, beginTime, endTime);
+        return R.success(pageInfo);
     }
 }

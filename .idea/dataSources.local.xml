@@ -15,39 +15,5 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
-    <data-source name="@192.168.249.130:3307" uuid="c0f58b24-9e36-4a30-9a42-fcfff9ece12a">
-      <database-info product="MySQL" version="9.1.0" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MYSQL" exact-version="9.1.0" exact-driver-version="8.2">
-        <extra-name-characters>#@</extra-name-characters>
-        <identifier-quote-string>`</identifier-quote-string>
-      </database-info>
-      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
-      <secret-storage>master_key</secret-storage>
-      <user-name>root</user-name>
-      <schema-mapping>
-        <introspection-scope>
-          <node kind="schema">
-            <name qname="@" />
-            <name qname="takeout" />
-          </node>
-        </introspection-scope>
-      </schema-mapping>
-    </data-source>
-    <data-source name="@192.168.249.130:3308" uuid="44abe2ea-65a9-4b1d-8b5e-afde323c4fcc">
-      <database-info product="MySQL" version="9.1.0" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MYSQL" exact-version="9.1.0" exact-driver-version="8.2">
-        <extra-name-characters>#@</extra-name-characters>
-        <identifier-quote-string>`</identifier-quote-string>
-      </database-info>
-      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
-      <secret-storage>master_key</secret-storage>
-      <user-name>root</user-name>
-      <schema-mapping>
-        <introspection-scope>
-          <node kind="schema">
-            <name qname="@" />
-            <name qname="takeout" />
-          </node>
-        </introspection-scope>
-      </schema-mapping>
-    </data-source>
   </component>
 </project>

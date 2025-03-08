@@ -34,14 +34,3 @@ public class   WebMvcConfig extends WebMvcConfigurationSupport {
         converters.add(0,messageConverter);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
