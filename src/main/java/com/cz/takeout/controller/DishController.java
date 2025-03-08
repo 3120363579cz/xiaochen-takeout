@@ -39,14 +39,10 @@ public class DishController {
     @Autowired
     private CategoryService categoryService;
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-
     //新增菜品
     @PostMapping
     @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> save(@RequestBody DishDto dishDto) {
-        log.info(dishDto.toString());
 
         dishService.saveWithFlavor(dishDto);
         return R.success("新增菜品成功");
@@ -65,8 +61,6 @@ public class DishController {
     @PutMapping
     @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> update(@RequestBody DishDto dishDto) {
-        log.info(dishDto.toString());
-
         dishService.updateWithFlavor(dishDto);
         return R.success("修改菜品成功");
     }

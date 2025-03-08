@@ -24,8 +24,6 @@ public class ShoppingCartController {
     //添加购物车
     @PostMapping("/add")
     public R<ShoppingCart> add(@RequestBody ShoppingCart shoppingCart){
-        log.info("购物车数据:{}",shoppingCart);
-
         //设置用户id，指定当前是哪个用户的购物车数据
         Long currentId = BaseContext.getCurrentId();
         shoppingCart.setUserId(currentId);
@@ -67,8 +65,6 @@ public class ShoppingCartController {
     //查看购物车
     @GetMapping("/list")
     public R<List<ShoppingCart>> list(){
-        log.info("查看购物车...");
-
         LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ShoppingCart::getUserId,BaseContext.getCurrentId());
         queryWrapper.orderByAsc(ShoppingCart::getCreateTime);

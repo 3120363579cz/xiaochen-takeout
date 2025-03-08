@@ -66,8 +66,6 @@ public class EmployeeController {
     //新增员工
     @PostMapping
     public R<String> save(HttpServletRequest request,@RequestBody Employee employee){
-        log.info("新增员工，员工信息：{}",employee.toString());
-
         //设置初始密码123456，需要进行md5加密处理
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
 
@@ -88,8 +86,6 @@ public class EmployeeController {
     //员工信息分页查询
     @GetMapping("/page")
     public R<Page> page(int page,int pageSize,String name){
-        log.info("page = {},pageSize = {},name = {}" ,page,pageSize,name);
-
         //构造分页构造器
         Page pageInfo = new Page(page,pageSize);
 
@@ -109,10 +105,7 @@ public class EmployeeController {
     // 根据id修改员工信息
     @PutMapping
     public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
-        log.info(employee.toString());
-
-        long id = Thread.currentThread().getId();
-        log.info("线程id为：{}",id);
+//        long id = Thread.currentThread().getId();
 //        Long empId = (Long)request.getSession().getAttribute("employee");
 //        employee.setUpdateTime(LocalDateTime.now());
 //        employee.setUpdateUser(empId);
@@ -124,7 +117,6 @@ public class EmployeeController {
     //根据id查询员工信息
     @GetMapping("/{id}")
     public R<Employee> getById(@PathVariable Long id){
-        log.info("根据id查询员工信息...");
         Employee employee = employeeService.getById(id);
         if(employee != null){
             return R.success(employee);
