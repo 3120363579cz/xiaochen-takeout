@@ -1,7 +1,6 @@
 package com.cz.takeout.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cz.takeout.common.BaseContext;
 import com.cz.takeout.common.R;
@@ -101,7 +100,7 @@ public class OrderController {
 
     //用户支付后查看订单
     @GetMapping("/userPage")
-    public R<Page> page(int page, int pageSize) {
+    public R<Page<OrderDto>> page(int page, int pageSize) {
         //分页构造器对象
         Page<Orders> pageInfo = new Page<>(page, pageSize);
         Page<OrderDto> pageDto = new Page<>(page, pageSize);
@@ -138,7 +137,7 @@ public class OrderController {
 
     //后台查询订单明细
     @GetMapping("/page")
-    public R<Page> page(int page, int pageSize, String number, String beginTime, String endTime) {
+    public R<Page<Orders>> page(int page, int pageSize, String number, String beginTime, String endTime) {
         return R.success(orderService.pageOrders(page, pageSize, number, beginTime, endTime));
     }
 

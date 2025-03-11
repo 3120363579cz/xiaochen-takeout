@@ -42,8 +42,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         LambdaQueryWrapper<OrderDetail> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(OrderDetail::getOrderId, orderId);
         //根据order表的条件查询出order_detail的数据，因为一个订单可能有多条菜品数据
-        List<OrderDetail> orderDetailList = orderDetailService.list(queryWrapper);
-        return orderDetailList;
+        return orderDetailService.list(queryWrapper);
     }
 
     //查看订单明细
@@ -73,7 +72,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         wrapper.eq(ShoppingCart::getUserId,userId);
         List<ShoppingCart> shoppingCarts = shoppingCartService.list(wrapper);
 
-        if(shoppingCarts == null || shoppingCarts.size() == 0){
+        if(shoppingCarts == null || shoppingCarts.isEmpty()){
             throw new CustomException("购物车为空，不能下单");
         }
 

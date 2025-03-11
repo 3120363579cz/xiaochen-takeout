@@ -65,7 +65,7 @@ public class AddressBookController {
 
     //根据id查询地址
     @GetMapping("/{id}")
-    public R get(@PathVariable Long id) {
+    public R<AddressBook> get(@PathVariable Long id) {
         AddressBook addressBook = addressBookService.getById(id);
         if (addressBook != null) {
             return R.success(addressBook);
