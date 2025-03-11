@@ -1,7 +1,9 @@
 package com.cz.takeout.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.cz.takeout.common.BaseContext;
+import com.cz.takeout.common.CustomException;
 import com.cz.takeout.common.R;
 import com.cz.takeout.entity.ShoppingCart;
 import com.cz.takeout.service.ShoppingCartService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 //购物车
 @Slf4j
@@ -60,6 +63,38 @@ public class ShoppingCartController {
         }
 
         return R.success(cartServiceOne);
+    }
+
+    //数值删减
+    @PostMapping("/sub")
+    public R<ShoppingCart> reduceCartItem(@RequestBody ShoppingCart cart) {
+        Long userId = BaseContext.getCurrentId();
+
+        // 构建动态查询条件
+        LambdaQueryWrapper<ShoppingCart> queryWrapper = Wrappers.lambdaQuery(ShoppingCart.class)
+                .eq(ShoppingCart::getUserId, userId)
+                .eq(cart.getDishId() != null, ShoppingCart::getDishId, cart.getDishId())
+                .eq(cart.getSetmealId() != null, ShoppingCart::getSetmealId, cart.getSetmealId());
+
+        ShoppingCart item = shoppingCartService.getOne(queryWrapper);
+        if (item == null) {
+            throw new CustomException("购物车条目不存在");
+        }
+
+        int currentQuantity = Optional.ofNullable(item.getNumber()).orElse(0);
+        if (currentQuantity <= 0) {
+            throw new CustomException("商品数量不可为负值");
+        }
+
+        if (currentQuantity == 1) {
+            shoppingCartService.removeById(item.getId());
+            item.setNumber(0); // 保持响应数据一致性
+        } else {
+            item.setNumber(currentQuantity - 1);
+            shoppingCartService.updateById(item);
+        }
+
+        return R.success(item);
     }
 
     //查看购物车

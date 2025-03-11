@@ -37,6 +37,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
     @Autowired
     private OrderDetailService orderDetailService;
 
+    @Override
+    public List<OrderDetail> getOrderDetailListByOrderId(Long orderId){
+        LambdaQueryWrapper<OrderDetail> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(OrderDetail::getOrderId, orderId);
+        //根据order表的条件查询出order_detail的数据，因为一个订单可能有多条菜品数据
+        List<OrderDetail> orderDetailList = orderDetailService.list(queryWrapper);
+        return orderDetailList;
+    }
+
     //查看订单明细
     @Override
     public Page<Orders> pageOrders(int page, int pageSize, String number, String beginTime, String endTime) {
