@@ -47,6 +47,8 @@ public class UserController {
         if (StringUtils.isNotEmpty(phone)) {
             //生成随机的4位验证码
             String code = ValidateCodeUtils.generateValidateCode(4).toString();
+            log.info("code={}", code);
+
             //调用阿里云提供的短信服务API完成发送短信
             //SMSUtils.sendMessage("瑞吉外卖","",phone,code);
 
