@@ -49,8 +49,6 @@ public class SetmealController {
     @PostMapping
     @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> save(@RequestBody SetmealDto setmealDto) {
-        log.info("套餐信息：{}", setmealDto);
-
         setmealService.saveWithDish(setmealDto);
 
         return R.success("新增套餐成功");
@@ -60,9 +58,8 @@ public class SetmealController {
     @DeleteMapping
     @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> delete(@RequestParam List<Long> ids) {
-        log.info("ids:{}", ids);
-
         setmealService.removeWithDish(ids);
+
         return R.success("套餐数据删除成功");
     }
 
