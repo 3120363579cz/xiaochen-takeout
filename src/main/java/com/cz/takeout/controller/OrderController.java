@@ -40,6 +40,7 @@ public class OrderController {
     @PostMapping("/submit")
     public R<String> submit(@RequestBody Orders orders) {
         orderService.submit(orders);
+
         return R.success("下单成功");
     }
 
@@ -157,6 +158,5 @@ public class OrderController {
         return R.success("订单状态修改成功");
 
     }
-    //查看手机版历史纪录
 
 }

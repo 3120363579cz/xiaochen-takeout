@@ -65,6 +65,7 @@ public class SetmealController {
 
     //批量停售
     @PostMapping("/status/0")
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> closeStatus(@RequestParam List<Long> ids){
         LambdaUpdateWrapper<Setmeal> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.in(Setmeal::getId, ids)
@@ -75,6 +76,7 @@ public class SetmealController {
 
     //批量起售
     @PostMapping("/status/1")
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> openStatus(@RequestParam List<Long> ids){
         LambdaUpdateWrapper<Setmeal> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.in(Setmeal::getId, ids)
@@ -92,6 +94,7 @@ public class SetmealController {
 
     //修改套餐
     @PutMapping
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> update(@RequestBody SetmealDto setmealDto){
         setmealService.updateWithDish(setmealDto);
         return R.success("修改成功");
@@ -168,6 +171,12 @@ public class SetmealController {
         Set<Long> categoryIds = records.stream()
                 .map(Setmeal::getCategoryId)
                 .collect(Collectors.toSet());
+
+        //非空校验
+        if (categoryIds.isEmpty()) {
+            // 直接返回空分页结果
+            return R.success(new Page<>());
+        }
 
         Map<Long, String> categoryMap = categoryService.listByIds(categoryIds)
                 .stream()

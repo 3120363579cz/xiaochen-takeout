@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -36,6 +36,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
 
     @Autowired
     private OrderDetailService orderDetailService;
+
+    @Autowired
+    private DishService dishService;
+
+    @Autowired
+    private SetmealDishService setmealDishService;
+
+    @Autowired
+    private SetmealService setmealService;
 
     @Override
     public List<OrderDetail> getOrderDetailListByOrderId(Long orderId){
@@ -86,7 +95,86 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
             throw new CustomException("用户地址信息有误，不能下单");
         }
 
-        long orderId = IdWorker.getId();//订单号
+        // 初始化校验容器
+        List<Long> dishIds = new ArrayList<>();    // 单品菜品ID集合
+        List<Long> setmealIds = new ArrayList<>(); // 套餐ID集合
+        Map<Long, List<Long>> setmealDishMap = new HashMap<>(); // 套餐-菜品关系
+        Map<Long, Setmeal> setmealMap = new HashMap<>();// 套餐
+
+        // 分离单品与套餐
+        shoppingCarts.forEach(cart -> {
+            if (cart.getDishId() != null) {
+                dishIds.add(cart.getDishId()); // 收集单品菜品ID
+            } else if (cart.getSetmealId() != null) {
+                setmealIds.add(cart.getSetmealId()); // 收集套餐ID
+            }
+        });
+
+        // 批量查询菜品状态（绕过缓存）
+        Map<Long, Dish> dishMap = new HashMap<>(!dishIds.isEmpty() ?
+                dishService.listByIds(dishIds).stream()
+                        .collect(Collectors.toMap(Dish::getId, d -> d)) :
+                Collections.emptyMap());
+
+        // 批量查询套餐状态及关联菜品
+        if (!setmealIds.isEmpty()) {
+            List<Setmeal> setmeals = setmealService.listByIds(setmealIds);
+            setmealMap = setmeals.stream()
+                    .collect(Collectors.toMap(Setmeal::getId, s -> s));
+
+            // 查询所有套餐关联的菜品ID
+            List<SetmealDish> setmealDishes = setmealDishService.list(
+                    new LambdaQueryWrapper<SetmealDish>().in(SetmealDish::getSetmealId, setmealIds)
+            );
+
+            // 构建套餐ID -> 菜品ID列表映射
+            setmealDishes.forEach(sd ->
+                    setmealDishMap.computeIfAbsent(sd.getSetmealId(), k -> new ArrayList<>())
+                            .add(sd.getDishId())
+            );
+
+            // 收集所有关联菜品ID
+            List<Long> relatedDishIds = setmealDishes.stream()
+                    .map(SetmealDish::getDishId)
+                    .collect(Collectors.toList());
+            if (!relatedDishIds.isEmpty()) {
+                dishMap.putAll(dishService.listByIds(relatedDishIds).stream()
+                        .collect(Collectors.toMap(Dish::getId, d -> d)));
+            }
+        }
+
+        // 多层级状态校验
+        List<String> errorMessages = new ArrayList<>();
+        Map<Long, Setmeal> finalSetmealMap = setmealMap;
+        shoppingCarts.forEach(cart -> {
+            if (cart.getDishId() != null) { // 单品校验
+                Dish dish = dishMap.get(cart.getDishId());
+                if (dish == null || dish.getStatus() != 1) {
+                    errorMessages.add("单品「" + cart.getName() + "」已停售");
+                }
+            } else if (cart.getSetmealId() != null) { // 套餐校验
+                Setmeal setmeal = finalSetmealMap.get(cart.getSetmealId());
+                if (setmeal == null || setmeal.getStatus() != 1) {
+                    errorMessages.add("套餐「" + cart.getName() + "」已停售");
+                } else {
+                    // 校验套餐内菜品状态
+                    List<Long> relatedDishIds = setmealDishMap.get(setmeal.getId());
+                    if (relatedDishIds != null) {
+                        relatedDishIds.stream()
+                                .filter(dishId -> !dishMap.containsKey(dishId) || dishMap.get(dishId).getStatus() != 1)
+                                .findAny()
+                                .ifPresent(dishId -> errorMessages.add("套餐「" + setmeal.getName() + "」包含停售菜品"));
+                    }
+                }
+            }
+        });
+
+        if (!errorMessages.isEmpty()) {
+            throw new CustomException(String.join("；", errorMessages));
+        }
+
+        //订单号
+        long orderId = IdWorker.getId();
 
         AtomicInteger amount = new AtomicInteger(0);
 

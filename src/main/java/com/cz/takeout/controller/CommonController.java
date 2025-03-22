@@ -24,7 +24,7 @@ public class CommonController {
 
     //文件上传
     @PostMapping("/upload")
-    public R<String> upload(MultipartFile file){
+    public R<String> upload(MultipartFile file) {
         //file是一个临时文件，需要转存到指定位置，否则本次请求完成后临时文件会删除
 
         //原始文件名
@@ -37,7 +37,7 @@ public class CommonController {
         //创建一个目录对象
         File dir = new File(basePath);
         //判断当前目录是否存在
-        if(!dir.exists()){
+        if (!dir.exists()) {
             //目录不存在，需要创建
             dir.mkdirs();
         }
@@ -53,7 +53,7 @@ public class CommonController {
 
     //文件下载
     @GetMapping("/download")
-    public void download(String name, HttpServletResponse response){
+    public void download(String name, HttpServletResponse response) {
 
         try {
             //输入流，通过输入流读取文件内容
@@ -66,8 +66,8 @@ public class CommonController {
 
             int len = 0;
             byte[] bytes = new byte[1024];
-            while ((len = fileInputStream.read(bytes)) != -1){
-                outputStream.write(bytes,0,len);
+            while ((len = fileInputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, len);
                 outputStream.flush();
             }
 

@@ -26,6 +26,7 @@ public class AddressBookController {
     public R<AddressBook> save(@RequestBody AddressBook addressBook) {
         addressBook.setUserId(BaseContext.getCurrentId());
         addressBookService.save(addressBook);
+
         return R.success(addressBook);
     }
 
@@ -33,15 +34,15 @@ public class AddressBookController {
     @PutMapping
     public R<String> update(@RequestBody AddressBook addressBook) {
         LambdaQueryWrapper<AddressBook> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(AddressBook::getId,addressBook.getId());
-        addressBookService.update(addressBook,queryWrapper);
+        queryWrapper.eq(AddressBook::getId, addressBook.getId());
+        addressBookService.update(addressBook, queryWrapper);
 
         return R.success("修改成功");
     }
 
     //删除地址内容
     @DeleteMapping
-    public R<String> remove(Long ids){
+    public R<String> remove(Long ids) {
         addressBookService.removeById(ids);
 
         return R.success("修改成功");
@@ -60,6 +61,7 @@ public class AddressBookController {
         addressBook.setIsDefault(1);
         //SQL:update address_book set is_default = 1 where id = ?
         addressBookService.updateById(addressBook);
+
         return R.success(addressBook);
     }
 

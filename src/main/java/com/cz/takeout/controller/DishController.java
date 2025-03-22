@@ -2,6 +2,7 @@ package com.cz.takeout.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cz.takeout.common.R;
@@ -20,10 +21,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -52,6 +50,7 @@ public class DishController {
 
     //批量删除
     @DeleteMapping
+    @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> deleteByIds(Long[] ids) {
         dishService.removeByIds(Arrays.asList(ids));
         return R.success("删除成功");
@@ -60,7 +59,6 @@ public class DishController {
     //根据id查询菜品信息和对应的口味信息
     @GetMapping("/{id}")
     public R<DishDto> get(@PathVariable Long id) {
-
         DishDto dishDto = dishService.getByIdWithFlavor(id);
 
         return R.success(dishDto);
@@ -71,11 +69,13 @@ public class DishController {
     @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> update(@RequestBody DishDto dishDto) {
         dishService.updateWithFlavor(dishDto);
+
         return R.success("修改菜品成功");
     }
 
     //启售，批量启售
     @PostMapping("/status/1")
+    @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> openStatus(Long[] ids) {
         // 构建UpdateWrapper批量更新
         LambdaUpdateWrapper<Dish> updateWrapper = new LambdaUpdateWrapper<>();
@@ -88,7 +88,8 @@ public class DishController {
 
     //停售，批量停售
     @PostMapping("/status/0")
-    public R<String> closeStatus(Long[] ids){
+    @CacheEvict(value = "dishCache", allEntries = true)
+    public R<String> closeStatus(Long[] ids) {
         // 构建UpdateWrapper批量更新
         LambdaUpdateWrapper<Dish> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.in(Dish::getId, ids)
@@ -130,6 +131,12 @@ public class DishController {
                 .map(Dish::getCategoryId)
                 .collect(Collectors.toSet());
 
+        //非空校验
+        if (categoryIds.isEmpty()) {
+            // 直接返回空分页结果
+            return R.success(new Page<>());
+        }
+
         Map<Long, String> categoryMap = categoryService.listByIds(categoryIds)
                 .stream()
                 .collect(Collectors.toMap(Category::getId, Category::getName));
@@ -166,6 +173,12 @@ public class DishController {
         queryWrapper.orderByAsc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
 
         List<Dish> list = dishService.list(queryWrapper);
+
+        //非空校验
+        if (CollectionUtils.isEmpty(list)) {
+            // 直接返回空结果
+            return R.success(Collections.emptyList());
+        }
 
         // 批量查询分类信息
         Set<Long> categoryIds = list.stream()
