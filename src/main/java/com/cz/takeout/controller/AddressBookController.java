@@ -25,15 +25,33 @@ public class AddressBookController {
     @PostMapping
     public R<AddressBook> save(@RequestBody AddressBook addressBook) {
         addressBook.setUserId(BaseContext.getCurrentId());
-        log.info("addressBook:{}", addressBook);
         addressBookService.save(addressBook);
+
         return R.success(addressBook);
+    }
+
+    //修改地址内容
+    @PutMapping
+    public R<String> update(@RequestBody AddressBook addressBook) {
+        LambdaQueryWrapper<AddressBook> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(AddressBook::getId, addressBook.getId());
+        addressBookService.update(addressBook, queryWrapper);
+
+        return R.success("修改成功");
+    }
+
+    //删除地址内容
+    @DeleteMapping
+    public R<String> remove(Long ids) {
+        addressBookService.removeById(ids);
+
+        return R.success("修改成功");
+
     }
 
     //设置默认地址
     @PutMapping("default")
     public R<AddressBook> setDefault(@RequestBody AddressBook addressBook) {
-        log.info("addressBook:{}", addressBook);
         LambdaUpdateWrapper<AddressBook> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(AddressBook::getUserId, BaseContext.getCurrentId());
         wrapper.set(AddressBook::getIsDefault, 0);
@@ -43,12 +61,13 @@ public class AddressBookController {
         addressBook.setIsDefault(1);
         //SQL:update address_book set is_default = 1 where id = ?
         addressBookService.updateById(addressBook);
+
         return R.success(addressBook);
     }
 
     //根据id查询地址
     @GetMapping("/{id}")
-    public R get(@PathVariable Long id) {
+    public R<AddressBook> get(@PathVariable Long id) {
         AddressBook addressBook = addressBookService.getById(id);
         if (addressBook != null) {
             return R.success(addressBook);
@@ -78,7 +97,6 @@ public class AddressBookController {
     @GetMapping("/list")
     public R<List<AddressBook>> list(AddressBook addressBook) {
         addressBook.setUserId(BaseContext.getCurrentId());
-        log.info("addressBook:{}", addressBook);
 
         //条件构造器
         LambdaQueryWrapper<AddressBook> queryWrapper = new LambdaQueryWrapper<>();

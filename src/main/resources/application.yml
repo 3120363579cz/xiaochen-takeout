@@ -7,17 +7,17 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/takeout?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://mysql:3306/takeout?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: 123456
   data:
     redis:
-      host: 192.168.249.130
+      host: redis
       port: 6379
       database: 0
   cache:
     redis:
-      time-to-live: 600000  # 缓存数据过期时间（毫秒）
+      time-to-live: 600000
   mail:
     host: smtp.qq.com
     port: 465
@@ -31,6 +31,9 @@ spring:
             enable: false
           ssl:
             enable: true
+  web:
+    resources:
+      static-locations: classpath:/static/, classpath:/publiwc/, file:/usr/share/images/
 
 mybatis-plus:
   configuration:
@@ -41,4 +44,4 @@ mybatis-plus:
       id-type: ASSIGN_ID
 
 images:
-  path: D:\\桌面\\
+  path: /usr/share/images/  # 容器内部挂载路径

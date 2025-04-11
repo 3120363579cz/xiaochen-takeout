@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 @Slf4j
 @RestController
 @RequestMapping("/employee")
@@ -65,21 +63,9 @@ public class EmployeeController {
 
     //新增员工
     @PostMapping
-    public R<String> save(HttpServletRequest request,@RequestBody Employee employee){
-        log.info("新增员工，员工信息：{}",employee.toString());
-
+    public R<String> save(@RequestBody Employee employee){
         //设置初始密码123456，需要进行md5加密处理
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-
-//        employee.setCreateTime(LocalDateTime.now());
-//        employee.setUpdateTime(LocalDateTime.now());
-
-        //获得当前登录用户的id
-//        Long empId = (Long) request.getSession().getAttribute("employee");
-
-//        employee.setCreateUser(empId);
-//        employee.setUpdateUser(empId);
-
         employeeService.save(employee);
 
         return R.success("新增员工成功");
@@ -88,8 +74,6 @@ public class EmployeeController {
     //员工信息分页查询
     @GetMapping("/page")
     public R<Page> page(int page,int pageSize,String name){
-        log.info("page = {},pageSize = {},name = {}" ,page,pageSize,name);
-
         //构造分页构造器
         Page pageInfo = new Page(page,pageSize);
 
@@ -108,14 +92,7 @@ public class EmployeeController {
 
     // 根据id修改员工信息
     @PutMapping
-    public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
-        log.info(employee.toString());
-
-        long id = Thread.currentThread().getId();
-        log.info("线程id为：{}",id);
-//        Long empId = (Long)request.getSession().getAttribute("employee");
-//        employee.setUpdateTime(LocalDateTime.now());
-//        employee.setUpdateUser(empId);
+    public R<String> update(@RequestBody Employee employee){
         employeeService.updateById(employee);
 
         return R.success("员工信息修改成功");
@@ -124,7 +101,6 @@ public class EmployeeController {
     //根据id查询员工信息
     @GetMapping("/{id}")
     public R<Employee> getById(@PathVariable Long id){
-        log.info("根据id查询员工信息...");
         Employee employee = employeeService.getById(id);
         if(employee != null){
             return R.success(employee);

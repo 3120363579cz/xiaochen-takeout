@@ -67,8 +67,6 @@ public class UserController {
     //移动端用户登录
     @PostMapping("/login")
     public R<User> login(@RequestBody Map map, HttpSession session) {
-        log.info(map.toString());
-
         //获取手机号
         String phone = map.get("phone").toString();
 
@@ -118,7 +116,6 @@ public class UserController {
 //            //发送一个四位数的验证码,把验证码变成String类型
 //            String code = ValidateCodeUtils.generateValidateCode(4).toString();
 //            String text = "【小陈外卖】您好，您的登录验证码为：" + code + "，请尽快登录";
-//            log.info("验证码为：" + code);
 //            //发送短信
 //            userService.sendMsg(email,subject,text);
 //            //将验证码保存到session当中
